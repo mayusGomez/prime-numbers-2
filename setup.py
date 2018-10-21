@@ -1,6 +1,6 @@
 from setuptools import setup
 
-with open("README.rst", "r") as longdesc:
+with open("README.md", "r") as longdesc:
     long_description = longdesc.read()
 
 

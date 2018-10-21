@@ -30,21 +30,33 @@ def eval_prim(possible_prime):
     return True
 
 
+def next_prime(max_number_eval):
+    """Generate the prime values from 2 to a max number
+
+    Conditions:
+    - Exception of 2, a prime number is not even, only evaluate not even values from 3
+    """
+    if max_number_eval <= 1:
+        return
+    else:
+        yield 2
+
+        for x in range(3, max_number_eval+1, 2):
+            if eval_prim(x):
+                yield x
+
+
 def prime_numbers(max_number_eval=100):
     """
     List prime numbers for a values's range, by default the range is 100
 
-    Preconditions:
-    - Exception of 2, a prime number is not even
-
     :param max_number_eval: range's limit
     :return: None
     """
-    possibles_primes = (x for x in range(3, max_number_eval+1, 2))
-    primes = [x for x in possibles_primes if eval_prim(x)]
-    primes.insert(0, 2)
-    print('The prime numbers from 2 to {} are:{}'.format(max_number_eval, primes))
+    prime_numbers_list = list(next_prime(max_number_eval))
+    print('The prime numbers from 2 to {} are:{}'.format(max_number_eval, prime_numbers_list))
 
 
 if __name__ == '__main__':
     prime_numbers()
+
