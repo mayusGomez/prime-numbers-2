@@ -1,4 +1,5 @@
 """"List prime numbers from 2 to x number"""
+import math
 
 
 def eval_prim(possible_prime):
@@ -8,10 +9,9 @@ def eval_prim(possible_prime):
     Source: https://en.wikipedia.org/wiki/Primality_test
     This algorithm take on account that:
     - Prime number is natural number greater than 1 that cannot be formed by multiplying two smaller natural numbers
-    - A simple approach is evaluate "possible_prime % range(2,possible_prime)==0" but:
-        - The factors to evaluate are 2 to sqrt(possible_prime),
-        - The factors to evaluate only must be primes, primes are of the form 6k ± 1
-        - Not use Sieve of Eratosthenes(https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes) for save memory
+    - The factors to evaluate are 2 to sqrt(possible_prime),
+    - The factors to evaluate only must be primes, primes are of the form 6k ± 1
+    - A number n is prime only if sqrt(n) is not integer and if is not divisible for primes minors than sqrt(n)
 
     :param possible_prime: number to evaluate
     :return: True or False
@@ -20,10 +20,14 @@ def eval_prim(possible_prime):
         return False
     elif possible_prime <= 3:
         return True
-    elif possible_prime % 2 == 0 or possible_prime % 3 == 0:  # This values are primes
+    # Those values not are primes
+    elif possible_prime % 2 == 0 or possible_prime % 3 == 0 or math.sqrt(possible_prime).is_integer():
         return False
 
-    i = 5  # first factor to evaluate, of the form 6(1)-1, second to evaluate is 7 of teh form 6(1)+1
+    # First factor to evaluate, of the form 6(1)-1, second to evaluate is 7 of teh form 6(1)+1
+    # evaluate if is divisible  by possibles primes minors than sqrt(possible_prime), not save the previous primes
+    # for optimize memory
+    i = 5
     while i**2 <= possible_prime:
         if possible_prime % i == 0 or possible_prime % (i + 2) == 0:
             return False
@@ -47,16 +51,16 @@ def next_prime(max_number_eval=100):
     if max_number_eval > 2:
         yield 3
 
+        # only evaluates numbers of the form 6k ± 1
         k = 5
         while k <= max_number_eval:
             if eval_prim(k):
                 yield k
 
-            k += 2
-            if k <= max_number_eval and eval_prim(k):
+            if k+2 <= max_number_eval and eval_prim(k+2):
                 yield k
 
-            k += 4
+            k += 6
 
 
 def prime_numbers(max_number_eval=100):
@@ -71,5 +75,7 @@ def prime_numbers(max_number_eval=100):
 
 
 if __name__ == '__main__':
-    prime_numbers(503)
+    prime_numbers()
+
+
 
